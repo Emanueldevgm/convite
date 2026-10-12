@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-sand text-charcoal font-body antialiased;
+}
+
+::selection {
+  @apply bg-champagne/30;
+}
+
+/* Visible keyboard focus, kept subtle but present */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline-color: theme('colors.champagne.DEFAULT');
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.hairline {
+  position: relative;
+}
+
+.hairline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid theme('colors.champagne.DEFAULT');
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
