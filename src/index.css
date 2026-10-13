@@ -3,11 +3,18 @@
 @tailwind utilities;
 
 html {
+  width: 100%;
   scroll-behavior: smooth;
 }
 
 body {
   @apply bg-sand text-charcoal font-body antialiased;
+  width: 100%;
+}
+
+#root {
+  min-height: 100svh;
+  overflow-x: clip;
 }
 
 ::selection {

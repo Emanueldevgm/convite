@@ -5,8 +5,8 @@ import { fadeUp, viewport } from '../hooks/useAnimations'
 
 export default function Closing() {
   return (
-    <section className="bg-forest px-6 py-16 text-center text-sand">
-      <Parallax speed={-8} className="mx-auto w-full max-w-xs">
+    <section className="bg-forest px-4 py-10 text-center text-sand sm:px-6 sm:py-16">
+      <Parallax speed={-8} className="mx-auto w-full max-w-xs sm:max-w-sm lg:max-w-lg">
         <motion.figure
           variants={fadeUp}
           initial="hidden"

@@ -12,10 +12,10 @@ export default function App() {
   useLenis()
 
   return (
-    <main className="mx-auto max-w-md bg-sand">
+    <main className="mx-auto min-h-screen w-full max-w-6xl overflow-x-clip bg-sand shadow-xl shadow-black/5">
       <Cover />
 
-      <div className="space-y-14 px-5 py-14">
+      <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-10 px-4 py-10 sm:gap-14 sm:px-6 sm:py-14 md:grid-cols-2 md:gap-x-10 md:gap-y-16 lg:gap-x-16 lg:px-12">
         <AnimateInView variants={staggerContainer}>
           <EventDetails />
         </AnimateInView>
@@ -24,8 +24,10 @@ export default function App() {
           <Timeline />
         </AnimateInView>
 
-        <AnimateInView variants={fadeUp}>
-          <GuestLookup />
+        <AnimateInView variants={fadeUp} className="w-full md:col-span-2">
+          <div className="mx-auto w-full max-w-2xl">
+            <GuestLookup />
+          </div>
         </AnimateInView>
       </div>
 
