@@ -73,10 +73,11 @@ export default function Cover() {
               className="text-sm leading-relaxed text-charcoal/75 sm:text-base"
             >
               <strong>
-                O casal {couple.groom} e {couple.bride} anuncia o seu
-                Alambamento.
+                O casal {couple.groom} e {couple.bride} tem a honra de anunciar
+                a realização do seu alambamento.
               </strong>{' '}
-              Temos a honra de convidá-lo para participar no copo-d'água.
+              Têm a honra de convidá-lo a participar neste momento tão especial,
+              que será celebrado com a tradicional cerimónia do copo-d’água.
             </motion.p>
 
             <motion.p
