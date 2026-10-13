@@ -439,7 +439,7 @@ export default function GuestLookup() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-4"
+            className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto overscroll-contain bg-black/55 px-3 py-4 [padding-bottom:calc(env(safe-area-inset-bottom)+1rem)] sm:items-center sm:px-4"
             onClick={closeModal}
           >
             <motion.div
@@ -448,7 +448,8 @@ export default function GuestLookup() {
               animate="visible"
               exit="hidden"
               onClick={(event) => event.stopPropagation()}
-              className="relative w-full max-w-lg rounded-sm border border-bottle/40 bg-sand p-6 shadow-2xl shadow-black/20"
+              style={{ maxHeight: 'calc(100dvh - 2rem)' }}
+              className="relative my-auto w-full max-w-lg max-h-[calc(100vh-2rem)] overflow-y-auto overscroll-contain rounded-sm border border-bottle/40 bg-sand p-4 shadow-2xl shadow-black/20 [-webkit-overflow-scrolling:touch] sm:p-6"
             >
               <button
                 type="button"
@@ -459,23 +460,14 @@ export default function GuestLookup() {
                 ×
               </button>
 
-              <p className="pr-8 font-display text-3xl text-bottle">
+              <p className="pr-8 font-display text-2xl leading-tight text-bottle sm:text-3xl">
                 Olá, {getCoupleName(guest.name)}
               </p>
               <p className="mt-2 text-xs uppercase tracking-[0.2em] text-charcoal/45">
                 Convite confirmado
               </p>
 
-              <div className="mt-6 space-y-4 text-sm text-charcoal/75">
-                <Row label="Local"      value={eventDetails.location} />
-                <Row label="Mesa"       value={guest.table} />
-                <Row label="Horário"    value={eventDetails.time} />
-                <Row label="Data"       value={formatDate(eventDetails.date)} />
-                <Row label="Endereço"   value={eventDetails.address} />
-                <Row label="Dress code" value={eventDetails.dressCode} />
-              </div>
-
-              <div className="mt-6 flex flex-col items-center border-t border-charcoal/10 pt-5 text-center">
+              <div className="mt-4 flex flex-col items-center border-t border-charcoal/10 pt-4 text-center sm:mt-6 sm:pt-5">
                 <p className="text-xs uppercase tracking-widest2 text-charcoal/60">
                   QR code individual do convite
                 </p>
@@ -486,12 +478,12 @@ export default function GuestLookup() {
                       alt={`QR code do convite de ${getCoupleName(guest.name)}, mesa ${guest.table}`}
                       width="220"
                       height="220"
-                      className="mt-3 h-44 w-44 rounded-sm bg-sand p-2"
+                      className="mt-3 h-36 w-36 rounded-sm bg-sand p-2 sm:h-44 sm:w-44"
                     />
                     <button
                       type="button"
                       onClick={downloadQrCode}
-                      className="mt-4 rounded-sm bg-bottle px-4 py-2 text-xs uppercase tracking-widest2 text-sand transition-colors hover:bg-bottle-light"
+                      className="mt-3 w-full max-w-xs rounded-sm bg-bottle px-4 py-3 text-xs uppercase tracking-widest2 text-sand transition-colors hover:bg-bottle-light sm:mt-4 sm:w-auto"
                     >
                       Baixar QR code como imagem
                     </button>
@@ -514,6 +506,15 @@ export default function GuestLookup() {
                 <p className="mt-2 max-w-xs text-xs text-charcoal/55">
                   Apresente este código na entrada para identificar o seu convite e a mesa.
                 </p>
+              </div>
+
+              <div className="mt-5 grid grid-cols-1 gap-x-5 gap-y-3 text-sm text-charcoal/75 sm:mt-6 sm:grid-cols-2">
+                <Row label="Local" value={eventDetails.location} />
+                <Row label="Mesa" value={guest.table} />
+                <Row label="Horário" value={eventDetails.time} />
+                <Row label="Data" value={formatDate(eventDetails.date)} />
+                <Row label="Endereço" value={eventDetails.address} />
+                <Row label="Dress code" value={eventDetails.dressCode} />
               </div>
 
               <div className="mt-6 border-t border-charcoal/10 pt-4 text-center text-charcoal/60">
