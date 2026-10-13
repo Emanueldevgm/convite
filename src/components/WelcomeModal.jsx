@@ -29,7 +29,7 @@ export default function WelcomeModal() {
 
     stopLenis()
     document.body.style.overflow = 'hidden'
-    closeButtonRef.current?.focus()
+    closeButtonRef.current?.focus({ preventScroll: true })
 
     function handleKeyDown(event) {
       if (event.key === 'Escape') setIsOpen(false)

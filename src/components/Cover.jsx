@@ -72,9 +72,11 @@ export default function Cover() {
               variants={staggerItem}
               className="text-sm leading-relaxed text-charcoal/75 sm:text-base"
             >
-              <strong>Anunciamos o nosso Alambamento.</strong> Temos a honra de
-              convidar o Casal {couple.bride} e {couple.groom} para participar no
-              copo-d'água.
+              <strong>
+                O casal {couple.groom} e {couple.bride} anuncia o seu
+                Alambamento.
+              </strong>{' '}
+              Temos a honra de convidá-lo para participar no copo-d'água.
             </motion.p>
 
             <motion.p
