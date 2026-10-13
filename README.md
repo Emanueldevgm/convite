@@ -1,6 +1,6 @@
 # Convite — Julieta & Altino
 
-Convite de casamento virtual interativo, em React + Vite + Tailwind CSS.
+Convite de alambamento virtual interativo, em React + Vite + Tailwind CSS.
 
 ## Como rodar
 

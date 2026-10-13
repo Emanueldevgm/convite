@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useReward } from 'partycles'
 import { motion, AnimatePresence } from 'motion/react'
+import QRCode from 'qrcode'
 import { guestLookup, eventDetails } from '../data.js'
 import { stopLenis, startLenis } from '../hooks/useLenis'
 import { scaleIn } from '../hooks/useAnimations'
@@ -82,20 +83,21 @@ const AMBIGUITY_MARGIN = 0.05
 
 function scoreEntry(qTokens, entry) {
   if (!qTokens.length || !entry.tokens.length) return 0
-  let sum = 0
-  for (const et of entry.tokens) {
+
+  const firstNameSimilarity = tokenSimilarity(qTokens[0], entry.tokens[0])
+  if (firstNameSimilarity < TOKEN_MIN_SIM) return 0
+
+  let sum = firstNameSimilarity
+  for (const queryToken of qTokens.slice(1)) {
     let best = 0
-    for (const qt of qTokens) {
-      const s = tokenSimilarity(qt, et)
-      if (s > best) best = s
+    for (const entryToken of entry.tokens.slice(1)) {
+      best = Math.max(best, tokenSimilarity(queryToken, entryToken))
     }
     if (best < TOKEN_MIN_SIM) return 0
     sum += best
   }
-  const avg = sum / entry.tokens.length
-  const extra = Math.max(0, qTokens.length - entry.tokens.length)
-  const penalty = Math.min(0.45, extra * 0.15)
-  return Math.max(0, avg - penalty)
+
+  return sum / qTokens.length
 }
 
 function findMatches(query) {
@@ -118,6 +120,10 @@ function formatDate(dateString) {
   })
 }
 
+function getCoupleName(name) {
+  return /^casal\b/i.test(name) ? name : `Casal ${name}`
+}
+
 function Row({ label, value }) {
   return (
     <div className="flex items-start justify-between gap-4 border-b border-charcoal/10 pb-3">
@@ -134,21 +140,21 @@ function Row({ label, value }) {
    ============================================================ */
 export default function GuestLookup() {
   const [name, setName] = useState('')
-  const [partnerName, setPartnerName] = useState('')
   const [guest, setGuest] = useState(null)
   const [error, setError] = useState('')
   const [checking, setChecking] = useState(false)
+  const [qrCode, setQrCode] = useState('')
+  const [qrError, setQrError] = useState('')
+  const [downloadError, setDownloadError] = useState('')
 
   const { reward: celebrate } = useReward('guest-modal', 'petals', {
     particleCount: 40,
     physics: { gravity: 0.06, wind: 0.15 },
   })
 
-  const combined = [name, partnerName].filter(Boolean).join(' ')
-
   const canSubmit = useMemo(
-    () => tokenize(combined).length >= 1 && !checking,
-    [combined, checking],
+    () => tokenize(name).length >= 1 && !checking,
+    [name, checking],
   )
 
   useEffect(() => {
@@ -170,6 +176,188 @@ export default function GuestLookup() {
     }
   }, [guest, celebrate])
 
+  useEffect(() => {
+    if (!guest) {
+      setQrCode('')
+      setQrError('')
+      return
+    }
+
+    let active = true
+    setDownloadError('')
+    const payload = [
+      'CONVITE DE ALAMBAMENTO',
+      `Convidado: ${getCoupleName(guest.name)}`,
+      `Mesa: ${guest.table}`,
+      `Data: ${formatDate(eventDetails.date)}`,
+      `Local: ${eventDetails.location}`,
+    ].join('\n')
+
+    setQrCode('')
+    setQrError('')
+    QRCode.toDataURL(payload, {
+      errorCorrectionLevel: 'M',
+      margin: 2,
+      width: 220,
+      color: { dark: '#1a2b1f', light: '#f5efe3' },
+    })
+      .then((dataUrl) => {
+        if (active) setQrCode(dataUrl)
+      })
+      .catch((generationError) => {
+        console.error('Não foi possível gerar o QR code do convite.', generationError)
+        if (active) setQrError('Não foi possível gerar o QR code. Tente novamente.')
+      })
+
+    return () => {
+      active = false
+    }
+  }, [guest])
+
+  async function downloadQrCode() {
+    if (!qrCode || !guest) return
+
+    setDownloadError('')
+
+    try {
+      const qrImage = new Image()
+      const imageLoaded = new Promise((resolve, reject) => {
+        qrImage.onload = resolve
+        qrImage.onerror = () => reject(new Error('Não foi possível carregar o QR code.'))
+      })
+      qrImage.src = qrCode
+      await imageLoaded
+
+      const canvas = document.createElement('canvas')
+      canvas.width = 900
+      canvas.height = 1200
+      const context = canvas.getContext('2d')
+      if (!context) throw new Error('Não foi possível preparar a imagem.')
+
+      const drawRoundedRect = (x, y, width, height, radius) => {
+        context.beginPath()
+        context.moveTo(x + radius, y)
+        context.lineTo(x + width - radius, y)
+        context.quadraticCurveTo(x + width, y, x + width, y + radius)
+        context.lineTo(x + width, y + height - radius)
+        context.quadraticCurveTo(
+          x + width,
+          y + height,
+          x + width - radius,
+          y + height,
+        )
+        context.lineTo(x + radius, y + height)
+        context.quadraticCurveTo(x, y + height, x, y + height - radius)
+        context.lineTo(x, y + radius)
+        context.quadraticCurveTo(x, y, x + radius, y)
+        context.closePath()
+      }
+
+      context.fillStyle = '#0f1a13'
+      context.fillRect(0, 0, canvas.width, canvas.height)
+
+      drawRoundedRect(34, 34, 832, 1132, 26)
+      context.fillStyle = '#f5efe3'
+      context.fill()
+      context.strokeStyle = '#c9a227'
+      context.lineWidth = 3
+      context.stroke()
+
+      drawRoundedRect(48, 48, 804, 1104, 20)
+      context.strokeStyle = 'rgba(201, 162, 39, 0.45)'
+      context.lineWidth = 1
+      context.stroke()
+
+      context.fillStyle = '#1a2b1f'
+      context.textAlign = 'center'
+      context.textBaseline = 'middle'
+      context.font = '500 22px Jost, sans-serif'
+      context.fillStyle = '#8a6c20'
+      context.fillText('JULIETA  &  ALTINO', canvas.width / 2, 103)
+
+      context.fillStyle = '#1a2b1f'
+      context.font = '600 34px "Playfair Display", Georgia, serif'
+      context.fillText('QR CODE CONVITE DIGITAL', canvas.width / 2, 157)
+
+      context.strokeStyle = '#c9a227'
+      context.lineWidth = 2
+      context.beginPath()
+      context.moveTo(250, 201)
+      context.lineTo(650, 201)
+      context.stroke()
+      context.fillStyle = '#c9a227'
+      context.beginPath()
+      context.arc(canvas.width / 2, 201, 5, 0, Math.PI * 2)
+      context.fill()
+
+      const coupleName = getCoupleName(guest.name)
+      let nameFontSize = 42
+      context.font = `600 ${nameFontSize}px "Playfair Display", Georgia, serif`
+      while (context.measureText(coupleName).width > 740 && nameFontSize > 28) {
+        nameFontSize -= 2
+        context.font = `600 ${nameFontSize}px "Playfair Display", Georgia, serif`
+      }
+      context.fillStyle = '#1a2b1f'
+      context.fillText(coupleName, canvas.width / 2, 253)
+
+      drawRoundedRect(345, 285, 210, 48, 24)
+      context.fillStyle = '#1a2b1f'
+      context.fill()
+      context.fillStyle = '#f3e9d2'
+      context.font = '500 19px Jost, sans-serif'
+      context.fillText(`MESA ${guest.table.toUpperCase()}`, canvas.width / 2, 309)
+
+      drawRoundedRect(150, 354, 600, 600, 18)
+      context.fillStyle = '#ffffff'
+      context.fill()
+      context.strokeStyle = '#e8d9b5'
+      context.lineWidth = 2
+      context.stroke()
+      context.imageSmoothingEnabled = false
+      context.drawImage(qrImage, 180, 384, 540, 540)
+
+      context.fillStyle = '#3a3a35'
+      context.font = '400 18px Jost, sans-serif'
+      context.fillText('Apresente este código à entrada', canvas.width / 2, 988)
+
+      context.strokeStyle = '#c9a227'
+      context.lineWidth = 1
+      context.beginPath()
+      context.moveTo(180, 1030)
+      context.lineTo(720, 1030)
+      context.stroke()
+
+      context.fillStyle = '#1a2b1f'
+      context.font = '600 24px "Playfair Display", Georgia, serif'
+      context.fillText('ALAMBAMENTO', canvas.width / 2, 1068)
+      context.fillStyle = '#3a3a35'
+      context.font = '400 18px Jost, sans-serif'
+      context.fillText(
+        `${formatDate(eventDetails.date)}  ·  ${eventDetails.time}`,
+        canvas.width / 2,
+        1104,
+      )
+      context.font = '400 16px Jost, sans-serif'
+      context.fillText(eventDetails.location, canvas.width / 2, 1134)
+
+      const imageBlob = await new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob)
+          else reject(new Error('Não foi possível criar a imagem para download.'))
+        }, 'image/png')
+      })
+      const imageUrl = URL.createObjectURL(imageBlob)
+      const link = document.createElement('a')
+      link.href = imageUrl
+      link.download = `convite-digital-${normalizeText(guest.name).replace(/\s+/g, '-')}.png`
+      link.click()
+      window.setTimeout(() => URL.revokeObjectURL(imageUrl), 1000)
+    } catch (generationError) {
+      console.error('Não foi possível baixar a imagem do convite.', generationError)
+      setDownloadError('Não foi possível baixar a imagem. Tente novamente.')
+    }
+  }
+
   function handleSubmit(event) {
     event.preventDefault()
     if (!canSubmit) {
@@ -180,12 +368,12 @@ export default function GuestLookup() {
     setError('')
 
     setTimeout(() => {
-      const matches = findMatches(combined)
+      const matches = findMatches(name)
 
       if (matches.length === 0) {
         setGuest(null)
         setError(
-          'Convite não encontrado. Escreva o nome tal como consta no convite (nome + cônjuge, se aplicável).',
+          'Convite não encontrado. Tente pesquisar pelo primeiro nome do marido ou pelo nome do casal.',
         )
       } else if (
         matches.length > 1 &&
@@ -193,7 +381,7 @@ export default function GuestLookup() {
       ) {
         setGuest(null)
         setError(
-          'Existem vários convites parecidos. Seja mais específico — inclua o nome completo e o nome do(a) cônjuge.',
+          'Existem vários convites parecidos. Pesquise pelo primeiro nome do marido ou escreva o nome completo do casal.',
         )
       } else {
         setGuest(matches[0].entry)
@@ -215,33 +403,14 @@ export default function GuestLookup() {
             htmlFor="guest-name"
             className="mb-2 block text-xs uppercase tracking-widest2 text-charcoal/60"
           >
-            Nome completo
+            Nome do marido ou do casal
           </label>
           <input
             id="guest-name"
             type="text"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            placeholder="Ex: António Gabriel"
-            autoComplete="off"
-            className="w-full border-b border-charcoal/20 bg-transparent py-2 text-sm text-charcoal outline-none placeholder:text-charcoal/30 focus:border-champagne"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="guest-partner"
-            className="mb-2 block text-xs uppercase tracking-widest2 text-charcoal/60"
-          >
-            Nome do(a) cônjuge{' '}
-            <span className="text-charcoal/30">(opcional)</span>
-          </label>
-          <input
-            id="guest-partner"
-            type="text"
-            value={partnerName}
-            onChange={(event) => setPartnerName(event.target.value)}
-            placeholder="Ex: Joy"
+            placeholder="Ex: António ou António Gabriel"
             autoComplete="off"
             className="w-full border-b border-charcoal/20 bg-transparent py-2 text-sm text-charcoal outline-none placeholder:text-charcoal/30 focus:border-champagne"
           />
@@ -291,7 +460,7 @@ export default function GuestLookup() {
               </button>
 
               <p className="pr-8 font-display text-3xl text-bottle">
-                Olá, {guest.name}
+                Olá, {getCoupleName(guest.name)}
               </p>
               <p className="mt-2 text-xs uppercase tracking-[0.2em] text-charcoal/45">
                 Convite confirmado
@@ -304,6 +473,47 @@ export default function GuestLookup() {
                 <Row label="Data"       value={formatDate(eventDetails.date)} />
                 <Row label="Endereço"   value={eventDetails.address} />
                 <Row label="Dress code" value={eventDetails.dressCode} />
+              </div>
+
+              <div className="mt-6 flex flex-col items-center border-t border-charcoal/10 pt-5 text-center">
+                <p className="text-xs uppercase tracking-widest2 text-charcoal/60">
+                  QR code individual do convite
+                </p>
+                {qrCode ? (
+                  <>
+                    <img
+                      src={qrCode}
+                      alt={`QR code do convite de ${getCoupleName(guest.name)}, mesa ${guest.table}`}
+                      width="220"
+                      height="220"
+                      className="mt-3 h-44 w-44 rounded-sm bg-sand p-2"
+                    />
+                    <button
+                      type="button"
+                      onClick={downloadQrCode}
+                      className="mt-4 rounded-sm bg-bottle px-4 py-2 text-xs uppercase tracking-widest2 text-sand transition-colors hover:bg-bottle-light"
+                    >
+                      Baixar QR code como imagem
+                    </button>
+                    {downloadError && (
+                      <p role="alert" className="mt-2 text-sm text-red-700">
+                        {downloadError}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <p
+                    role={qrError ? 'alert' : undefined}
+                    className={`mt-3 text-sm ${
+                      qrError ? 'text-red-700' : 'text-charcoal/60'
+                    }`}
+                  >
+                    {qrError || 'A gerar o QR code…'}
+                  </p>
+                )}
+                <p className="mt-2 max-w-xs text-xs text-charcoal/55">
+                  Apresente este código na entrada para identificar o seu convite e a mesa.
+                </p>
               </div>
 
               <div className="mt-6 border-t border-charcoal/10 pt-4 text-center text-charcoal/60">

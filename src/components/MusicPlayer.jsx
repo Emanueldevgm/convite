@@ -80,7 +80,12 @@ export default function MusicPlayer() {
 
   return (
     <div className="hairline rounded-sm bg-bottle px-5 py-4 text-charcoal">
-      <audio ref={audioRef} src={music.src} preload="metadata" />
+      <audio
+        ref={audioRef}
+        src={music.src}
+        autoPlay
+        preload="auto"
+      />
       <div className="flex items-center gap-4">
         <button
           type="button"

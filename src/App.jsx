@@ -5,7 +5,6 @@ import { fadeUp, staggerContainer } from './hooks/useAnimations'
 import Cover from './components/Cover'
 import EventDetails from './components/EventDetails'
 import Timeline from './components/Timeline'
-import Gifts from './components/Gifts'
 import GuestLookup from './components/GuestLookup'
 import Closing from './components/Closing'
 
@@ -23,10 +22,6 @@ export default function App() {
 
         <AnimateInView variants={staggerContainer}>
           <Timeline />
-        </AnimateInView>
-
-        <AnimateInView variants={fadeUp}>
-          <Gifts />
         </AnimateInView>
 
         <AnimateInView variants={fadeUp}>
