@@ -65,14 +65,9 @@ export const dressCode = {
   ],
 }
 
-
-
-
 /* ============================================================
    Consulta de convites (GuestLookup)
    ============================================================ */
-
-   
 export const eventDetails = {
   location: 'Salão das Estrelas',
   address: 'Defronte ao ISCED, Uíge',
@@ -84,23 +79,51 @@ export const eventDetails = {
 }
 
 export const guestLookup = [
-  { name: 'António Gabriel', table: 'Economia' },
-  { name: 'Augusto António', table: 'Economia' },
-  { name: 'Costa Mazuela', table: 'Economia' },
-  { name: 'Casal Santos Cutúdico', table: 'Economia' },
-  { name: 'Casal Gabriel Men-Gabs', table: 'Economia' },
-  { name: 'Casal Bernardo Man-B', table: 'Contabilidade' },
-  { name: 'Casal Nsimba Paulo', table: 'Contabilidade' },
-  { name: 'Casal Alegria', table: 'Contabilidade' },
-  { name: 'Casal Bleizer Panzo', table: 'Contabilidade' },
-  { name: 'Casal Morais André', table: 'Contabilidade' },
-  { name: 'Casal Paulo Bunga', table: 'Psicologia' },
-  { name: 'Casal Esau C. B. Rogério', table: 'Psicologia' },
-  { name: 'Casal Soba Lussambo', table: 'Psicologia' },
-  { name: 'Casal Hermenegildo', table: 'Psicologia' },
-  { name: 'Casal Júlio', table: 'Psicologia' },
-  { name: 'Casal Francisco Bizingui', table: 'Pré-escolar' },
-  { name: 'Casal Garcia Cabenga', table: 'Pré-escolar' },
-  { name: 'Casal Bráulio', table: 'Pré-escolar' },
-  { name: 'David e Joy', table: 'Pré-escolar' },
+  // Economia
+  { name: 'António Gabriel',            table: 'Economia' },
+  { name: 'Augusto António',            table: 'Economia' },
+  { name: 'Costa Mazuela',              table: 'Economia' },
+  { name: 'Casal Santos Cutúdico',      table: 'Economia' },
+  { name: 'Casal Gabriel Men-Gabs',     table: 'Economia' },
+
+  // Contabilidade
+  { name: 'Casal Bernardo Man-B',       table: 'Contabilidade' },
+  { name: 'Casal Nsimba Paulo',         table: 'Contabilidade' },
+  { name: 'Casal Alegria',              table: 'Contabilidade' },
+  { name: 'Casal Bleizer Panzo',        table: 'Contabilidade' },
+  { name: 'Casal Morais André',         table: 'Contabilidade' },
+
+  // Psicologia
+  { name: 'Casal Paulo Bunga',          table: 'Psicologia' },
+  { name: 'Casal Esau C. B. Rogério',   table: 'Psicologia' },
+  { name: 'Casal Soba Lussambo',        table: 'Psicologia' },
+  { name: 'Casal Hermenegildo',         table: 'Psicologia' },
+  { name: 'Casal Júlio',                table: 'Psicologia' },
+
+  // Pré-escolar
+  { name: 'Casal Francisco Bizingui',   table: 'Pré-escolar' },
+  { name: 'Casal Garcia Cabenga',       table: 'Pré-escolar' },
+  { name: 'Casal Bráulio',              table: 'Pré-escolar' },
+  { name: 'David e Joy',                table: 'Pré-escolar' },
+
+  // Língua Portuguesa
+  { name: 'Amélia Nuria',               table: 'Língua Portuguesa' },
+  { name: 'Nsimba Farmácia',            table: 'Língua Portuguesa' },
+  { name: 'Casal Kitoko',               table: 'Língua Portuguesa' },
+  { name: 'Casal Martins António',      table: 'Língua Portuguesa' },
+  { name: 'Casal Mário Alberto',        table: 'Língua Portuguesa' },
+
+  // Literatura
+  { name: 'Casal António Waly',         table: 'Literatura' },
+  { name: 'Dr. Ozileidy',               table: 'Literatura' },
+  { name: 'Casal Nelfinas',             table: 'Literatura' },
+  { name: 'Casal Alexandre',            table: 'Literatura' },
+  { name: 'Casal Marques',              table: 'Literatura' },
+
+  // Estudo do Meio
+  { name: 'Casal Lucau Elisabeth',      table: 'Estudo do Meio' },
+  { name: 'Casal Fredy-Lukombo',        table: 'Estudo do Meio' },
+  { name: 'Casal Marcos-Isabel',        table: 'Estudo do Meio' },
+  { name: 'Casal Panzo-Muilo',          table: 'Estudo do Meio' },
+  { name: 'Casal Dredy-Metuia',         table: 'Estudo do Meio' },
 ]
