@@ -105,6 +105,7 @@ export const guestLookup = [
   { name: 'Casal Garcia Cabenga',       table: 'Pré-escolar' },
   { name: 'Casal Bráulio',              table: 'Pré-escolar' },
   { name: 'David e Joy',                table: 'Pré-escolar' },
+  { name: 'Casal Mariano',             table: 'Pré-escolar' },
 
   // Língua Portuguesa
   { name: 'Amélia Nuria',               table: 'Língua Portuguesa' },
