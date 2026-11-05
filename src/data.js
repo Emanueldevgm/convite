@@ -127,6 +127,7 @@ export const guestLookup = [
   { name: 'Casal Marcos-Isabel',        table: 'Estudo do Meio' },
   { name: 'Casal Panzo-Muilo',          table: 'Estudo do Meio' },
   { name: 'Casal Dredy-Metuia',         table: 'Estudo do Meio' },
+  { name: 'Cesaltina',                  table: 'Estudo do Meio' },
 
   { name: 'Hilária',                    table: 'Educação Física' },
 ]
