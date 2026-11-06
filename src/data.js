@@ -153,6 +153,7 @@ export const guestLookup = [
   // Educação Física
   { name: 'Hilária',                    table: 'Educação Física' },
   { name: 'Emanuel Garcia',             table: 'Educação Física' },
+  { name: 'Mateus Fernando',            table: 'Educação Física' },
 ]
 
 /* ============================================================
