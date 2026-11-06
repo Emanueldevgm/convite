@@ -1,3 +1,4 @@
+import { Routes, Route } from 'react-router-dom'
 import { useLenis } from './hooks/useLenis'
 import AnimateInView from './components/AnimateInView'
 import { fadeUp, staggerContainer } from './hooks/useAnimations'
@@ -8,8 +9,9 @@ import Timeline from './components/Timeline'
 import GuestLookup from './components/GuestLookup'
 import Closing from './components/Closing'
 import WelcomeModal from './components/WelcomeModal'
+import Menu from './pages/Menu'
 
-export default function App() {
+function Invite() {
   useLenis()
 
   return (
@@ -37,5 +39,14 @@ export default function App() {
         <Closing />
       </main>
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Invite />} />
+      <Route path="/menu" element={<Menu />} />
+    </Routes>
   )
 }

@@ -54,6 +54,11 @@ export const gifts = {
 }
 
 /* ============================================================
+   RSVP
+   ============================================================ */
+export const rsvpDeadline = '2026-10-30'
+
+/* ============================================================
    Dress code
    ============================================================ */
 export const dressCode = {
@@ -63,6 +68,22 @@ export const dressCode = {
     { hex: '#e8d9b5', name: 'Champanhe' },
     { hex: '#f5efe3', name: 'Areia' },
   ],
+}
+
+/* ============================================================
+   Informações extra
+   ============================================================ */
+export const extraInfo = [
+  { title: 'Estacionamento', text: 'Estacionamento disponível no local.' },
+  { title: 'Crianças',       text: 'Espaço reservado para os mais pequenos.' },
+  { title: 'Contactos',      text: 'Em caso de dúvida, contacte os noivos.' },
+]
+
+/* ============================================================
+   Fecho
+   ============================================================ */
+export const closingQuote = {
+  text: 'O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha.',
 }
 
 /* ============================================================
@@ -105,7 +126,7 @@ export const guestLookup = [
   { name: 'Casal Garcia Cabenga',       table: 'Pré-escolar' },
   { name: 'Casal Bráulio',              table: 'Pré-escolar' },
   { name: 'David e Joy',                table: 'Pré-escolar' },
-  { name: 'Casal Mariano',             table: 'Pré-escolar' },
+  { name: 'Casal Mariano',              table: 'Pré-escolar' },
 
   // Língua Portuguesa
   { name: 'Amélia Nuria',               table: 'Língua Portuguesa' },
@@ -129,5 +150,93 @@ export const guestLookup = [
   { name: 'Casal Dredy-Metuia',         table: 'Estudo do Meio' },
   { name: 'Cesaltina',                  table: 'Estudo do Meio' },
 
+  // Educação Física
   { name: 'Hilária',                    table: 'Educação Física' },
+]
+
+/* ============================================================
+   Mesas da festa
+   ============================================================ */
+export const tables = [
+  { slug: 'economia',           label: 'Economia' },
+  { slug: 'psicologia',         label: 'Psicologia' },
+  { slug: 'contabilidade',      label: 'Contabilidade' },
+  { slug: 'pre-escolar',        label: 'Pré-escolar' },
+  { slug: 'estudo-do-meio',     label: 'Estudo do Meio' },
+  { slug: 'lingua-portuguesa',  label: 'Língua Portuguesa' },
+  { slug: 'matematica',         label: 'Matemática' },
+  { slug: 'literatura',         label: 'Literatura' },
+  { slug: 'informatica',        label: 'Informática' },
+  { slug: 'biologia',           label: 'Biologia' },
+  { slug: 'gestao',             label: 'Gestão' },
+  { slug: 'educacao-laboral',   label: 'Educação Laboral' },
+  { slug: 'quimica',            label: 'Química' },
+  { slug: 'ensino-primario',    label: 'Ensino Primário' },
+  { slug: 'anatomia',           label: 'Anatomia' },
+  { slug: 'educacao-fisica',    label: 'Educação Física' },
+  { slug: 'historia',           label: 'História' },
+]
+
+/* ============================================================
+   Menu da festa
+   ============================================================ */
+export const menuFest = [
+  {
+    id: 'buffet-quente',
+    title: 'Buffet Quente',
+    items: [
+      'Bacalhau com natas',
+      'Arroz de Pato',
+      'Estrogonofe',
+      'Caldeirada de Cabrito',
+      'Bagre fumado com Muteta',
+      'Calulu de Peixe',
+      'Jinguinga de Cabrito',
+      'Peito Alto',
+    ],
+  },
+  {
+    id: 'guarnicoes',
+    title: 'Guarnições',
+    items: [
+      'Arroz de Cenoura',
+      'Feijão preto',
+      'Feijão de óleo de palma',
+      'Feijão de Banha',
+      'Batata frita',
+      'Funge de Bombo & Kuikuanga',
+      'Funge de Milho',
+    ],
+  },
+  {
+    id: 'acompanhamentos-tradicionais',
+    title: 'Acompanhamentos Tradicionais',
+    items: [
+      'Kizaca',
+      'Catato',
+      'Macayabo',
+      'Refogado de couves',
+      'Quiabo e jimboa',
+      'Fumbua',
+    ],
+  },
+  {
+    id: 'saladas',
+    title: 'Saladas',
+    items: [
+      'Mistas',
+      'Salada de Grão de Bico',
+      'Molho vinagrete',
+    ],
+  },
+  {
+    id: 'grelhados',
+    title: 'Grelhados',
+    items: [
+      'Coxa grelhada',
+      'Asa de frango',
+      'Carne grelhada (Vaca e porco)',
+      'Peixe grelhado',
+    ],
+  },
 ]
